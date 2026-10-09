@@ -24,7 +24,11 @@ const vm = require("node:vm");
   const deleted = [];
   const caches = {
     open: async () => cache,
-    keys: async () => ["mathe-schatzreise-v5", "math-racer-v0", "math-racer-v1"],
+    keys: async () => [
+      "mathe-schatzreise-v5",
+      "math-racer-v0",
+      "math-racer-v1",
+    ],
     delete: async (key) => {
       deleted.push(key);
     },

@@ -10,11 +10,7 @@
   "orientation": "any",
   "background_color": "#0e1b3a",
   "theme_color": "#0e1b3a",
-  "categories": [
-    "education",
-    "games",
-    "kids"
-  ],
+  "categories": ["education", "games", "kids"],
   "icons": [
     {
       "src": "icons/icon-192.png",

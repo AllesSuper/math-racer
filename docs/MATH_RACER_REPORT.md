@@ -17,12 +17,12 @@ mobile Darstellung und Offlinebetrieb.
 
 ## Lernregeln
 
-| Rechenart | Grenzen |
-| --- | --- |
-| Addition | 2 oder 3 nichtnegative ganze Operanden; Summe höchstens 100 |
-| Subtraktion | Ausgangszahl höchstens 100; Ergebnis nichtnegativ |
-| Multiplikation | Beide Faktoren 2–10; alle 81 Paare ab der ersten Aufgabe |
-| Division | Dividend höchstens 100; Divisor 2–10; ganzzahliges Ergebnis 1–10; alle 90 Fakten ab der ersten Aufgabe |
+| Rechenart      | Grenzen                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------ |
+| Addition       | 2 oder 3 nichtnegative ganze Operanden; Summe höchstens 100                                            |
+| Subtraktion    | Ausgangszahl höchstens 100; Ergebnis nichtnegativ                                                      |
+| Multiplikation | Beide Faktoren 2–10; alle 81 Paare ab der ersten Aufgabe                                               |
+| Division       | Dividend höchstens 100; Divisor 2–10; ganzzahliges Ergebnis 1–10; alle 90 Fakten ab der ersten Aufgabe |
 
 Normale Runden: 25 Stationen. Die bestehende optionale Kurzrunde hat 10 Stationen.
 Timer und Blitz bleiben optional und sind bei einer neuen Installation aus.

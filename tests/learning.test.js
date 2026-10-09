@@ -61,10 +61,7 @@ try {
   for (const [level, seen] of multiplicationByLevel)
     check(seen.size === 81, "all 81 products available at level " + level);
   for (const [level, seen] of divisionByLevel) {
-    check(
-      seen.size === 90,
-      "all 90 inverse facts available at level " + level,
-    );
+    check(seen.size === 90, "all 90 inverse facts available at level " + level);
     for (const example of ["64:8", "72:9", "56:7", "54:9", "100:10"])
       check(seen.has(example), "division available immediately: " + example);
   }
@@ -225,7 +222,8 @@ for (let dividend = 1; dividend <= 100; dividend++)
   for (let divisor = 1; divisor <= 10; divisor++) {
     const q = task("div", [dividend, divisor], dividend / divisor);
     check(
-      app.validateTask(q) === (divisor >= 2 && dividend % divisor === 0 && q.answer <= 10),
+      app.validateTask(q) ===
+        (divisor >= 2 && dividend % divisor === 0 && q.answer <= 10),
       "exhaustive division bounds",
     );
   }

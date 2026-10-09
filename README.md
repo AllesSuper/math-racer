@@ -183,7 +183,7 @@ It is a gift to families, classrooms, and the open-source community.
 | ----------------- | ------------------------------------------ | ---------------------------------------------- |
 | ➕ Addition       | 2 or 3 numbers, each 0–100, sum ≤ 100      | Sums never exceed 100.                         |
 | ➖ Subtraction    | 0–100                                      | Result is never negative in normal play.       |
-| ✖️ Multiplication | 2×2 up to 10×10                            | Both factors 2–10; all 81 pairs immediately.  |
+| ✖️ Multiplication | 2×2 up to 10×10                            | Both factors 2–10; all 81 pairs immediately.   |
 | ➗ Division       | Dividend ≤100, divisor 2–10, quotient 1–10 | Whole numbers, no remainder; maximum 100 ÷ 10. |
 | 🌈 Mixed          | All four operations                        | Station counts differ by at most one.          |
 

@@ -22,10 +22,9 @@ const server = http.createServer((request, response) => {
   const file = path.resolve(
     root,
     "." +
-      new URL(request.url, "http://localhost").pathname.replace(/^\/math-racer(?=\/)/, "").replace(
-        /\/$/,
-        "/index.html",
-      ),
+      new URL(request.url, "http://localhost").pathname
+        .replace(/^\/math-racer(?=\/)/, "")
+        .replace(/\/$/, "/index.html"),
   );
   if (!file.startsWith(root + path.sep)) {
     response.writeHead(403).end();
@@ -42,7 +41,8 @@ const server = http.createServer((request, response) => {
 (async () => {
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const url =
-    process.env.TEST_BASE_URL || "http://127.0.0.1:" + server.address().port + "/math-racer/";
+    process.env.TEST_BASE_URL ||
+    "http://127.0.0.1:" + server.address().port + "/math-racer/";
   const engine = process.env.TEST_BROWSER || "chromium";
   const browser = await { chromium, firefox, webkit }[engine].launch({
     headless: true,
@@ -196,7 +196,10 @@ const server = http.createServer((request, response) => {
             : type === "sub"
               ? numbers[0] - numbers[1]
               : numbers.reduce((sum, n) => sum + n, 0);
-      check(require("../app.js").validateTask({type, operands: numbers, answer}), "UI task meets curriculum");
+      check(
+        require("../app.js").validateTask({ type, operands: numbers, answer }),
+        "UI task meets curriculum",
+      );
       return { type, numbers, answer };
     }
     async function solve() {
@@ -445,11 +448,19 @@ const server = http.createServer((request, response) => {
       await navigator.serviceWorker.ready;
     });
     check(
-      await page.evaluate(() => navigator.serviceWorker.ready.then((r) => new URL(r.scope).pathname === "/math-racer/")),
+      await page.evaluate(() =>
+        navigator.serviceWorker.ready.then(
+          (r) => new URL(r.scope).pathname === "/math-racer/",
+        ),
+      ),
       "service worker scope is repository subpath",
     );
     check(
-      await page.evaluate(() => localStorage.getItem("ms_progress") === '{"coins":12345}' && localStorage.getItem("ms_settings") === '{"timer":true}'),
+      await page.evaluate(
+        () =>
+          localStorage.getItem("ms_progress") === '{"coins":12345}' &&
+          localStorage.getItem("ms_settings") === '{"timer":true}',
+      ),
       "original app storage untouched",
     );
     await page.reload();

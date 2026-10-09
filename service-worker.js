@@ -38,7 +38,9 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key.startsWith("math-racer-") && key !== CACHE_VERSION)
+            .filter(
+              (key) => key.startsWith("math-racer-") && key !== CACHE_VERSION,
+            )
             .map((key) => caches.delete(key)),
         ),
       )
