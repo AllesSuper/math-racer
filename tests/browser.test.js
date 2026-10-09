@@ -22,7 +22,7 @@ const server = http.createServer((request, response) => {
   const file = path.resolve(
     root,
     "." +
-      new URL(request.url, "http://localhost").pathname.replace(
+      new URL(request.url, "http://localhost").pathname.replace(/^\/math-racer(?=\/)/, "").replace(
         /\/$/,
         "/index.html",
       ),
@@ -42,7 +42,7 @@ const server = http.createServer((request, response) => {
 (async () => {
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const url =
-    process.env.TEST_BASE_URL || "http://127.0.0.1:" + server.address().port;
+    process.env.TEST_BASE_URL || "http://127.0.0.1:" + server.address().port + "/math-racer/";
   const engine = process.env.TEST_BROWSER || "chromium";
   const browser = await { chromium, firefox, webkit }[engine].launch({
     headless: true,
@@ -60,13 +60,16 @@ const server = http.createServer((request, response) => {
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(url);
+    check((await page.title()) === "Math Racer", "project title");
     await page
       .locator("#language-grid button")
       .filter({ hasText: "Deutsch" })
       .click();
     await page.evaluate(() => {
+      localStorage.setItem("ms_progress", '{"coins":12345}');
+      localStorage.setItem("ms_settings", '{"timer":true}');
       localStorage.setItem(
-        "ms_settings",
+        "mr_settings",
         JSON.stringify({
           sound: false,
           timer: false,
@@ -76,7 +79,7 @@ const server = http.createServer((request, response) => {
         }),
       );
       localStorage.setItem(
-        "ms_progress",
+        "mr_progress",
         JSON.stringify({
           coins: 500,
           stars: 77,
@@ -105,7 +108,7 @@ const server = http.createServer((request, response) => {
     await page.reload();
     await page.clock.install();
     const saved = () =>
-      page.evaluate(() => JSON.parse(localStorage.getItem("ms_progress")));
+      page.evaluate(() => JSON.parse(localStorage.getItem("mr_progress")));
     check(
       (await page.locator("#menu-coins").textContent()) === "500",
       "old coins retained",
@@ -193,6 +196,7 @@ const server = http.createServer((request, response) => {
             : type === "sub"
               ? numbers[0] - numbers[1]
               : numbers.reduce((sum, n) => sum + n, 0);
+      check(require("../app.js").validateTask({type, operands: numbers, answer}), "UI task meets curriculum");
       return { type, numbers, answer };
     }
     async function solve() {
@@ -274,10 +278,10 @@ const server = http.createServer((request, response) => {
       "old badge retained",
     );
     await page.locator('#screen-summary [data-action="go-menu"]').click();
-    for (const factor of [1, 10]) {
+    for (const factor of [2, 10]) {
       await page.evaluate((value) => {
         window.originalTestRandom = Math.random;
-        Math.random = () => (value === 1 ? 0 : 0.99999);
+        Math.random = () => (value === 2 ? 0 : 0.99999);
       }, factor);
       await start("mul", true, "adaptive");
       const initialProduct = await current();
@@ -360,7 +364,7 @@ const server = http.createServer((request, response) => {
             JSON.stringify({
               chip: document.getElementById("game-timer-chip").outerHTML,
               ringHidden: document.getElementById("timer-ring").hidden,
-              settings: JSON.parse(localStorage.getItem("ms_settings")),
+              settings: JSON.parse(localStorage.getItem("mr_settings")),
             }),
           )),
       );
@@ -440,6 +444,14 @@ const server = http.createServer((request, response) => {
     await page.evaluate(async () => {
       await navigator.serviceWorker.ready;
     });
+    check(
+      await page.evaluate(() => navigator.serviceWorker.ready.then((r) => new URL(r.scope).pathname === "/math-racer/")),
+      "service worker scope is repository subpath",
+    );
+    check(
+      await page.evaluate(() => localStorage.getItem("ms_progress") === '{"coins":12345}' && localStorage.getItem("ms_settings") === '{"timer":true}'),
+      "original app storage untouched",
+    );
     await page.reload();
     check(
       await page.evaluate(() => !!navigator.serviceWorker.controller),
@@ -495,10 +507,10 @@ const server = http.createServer((request, response) => {
     );
     await freshPage.evaluate(() => {
       localStorage.setItem(
-        "ms_settings",
+        "mr_settings",
         JSON.stringify({ timer: true, blitz: true, sound: false }),
       );
-      localStorage.setItem("ms_progress", "{broken");
+      localStorage.setItem("mr_progress", "{broken");
     });
     await freshPage.reload();
     await freshPage.locator('#screen-menu [data-action="go-settings"]').click();
@@ -514,7 +526,7 @@ const server = http.createServer((request, response) => {
     freshPage.once("dialog", (dialog) => dialog.accept());
     await freshPage.locator('[data-action="reset"]').click();
     const reset = await freshPage.evaluate(() =>
-      JSON.parse(localStorage.getItem("ms_progress")),
+      JSON.parse(localStorage.getItem("mr_progress")),
     );
     check(
       reset.coins === 0 &&

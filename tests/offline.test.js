@@ -21,12 +21,12 @@ const vm = require("node:vm");
     },
     put: async (request, response) => stores.set(request.url, response),
   };
-  let deleted;
+  const deleted = [];
   const caches = {
     open: async () => cache,
-    keys: async () => ["mathe-schatzreise-v4", "mathe-schatzreise-v5"],
+    keys: async () => ["mathe-schatzreise-v5", "math-racer-v0", "math-racer-v1"],
     delete: async (key) => {
-      deleted = key;
+      deleted.push(key);
     },
     match: async (request) =>
       stores.get(typeof request === "string" ? request : request.url),
@@ -48,6 +48,7 @@ const vm = require("node:vm");
     },
     self: {
       location: { origin: "https://example.test" },
+      registration: { scope: "https://example.test/math-racer/" },
       addEventListener: (name, handler) => {
         events[name] = handler;
       },
@@ -77,12 +78,12 @@ const vm = require("node:vm");
     },
   });
   await pending;
-  assert.equal(deleted, "mathe-schatzreise-v4");
+  assert.deepEqual(deleted, ["math-racer-v0"]);
   assert.ok(claimed);
   let response;
   const request = {
     method: "GET",
-    url: "https://example.test/app.js",
+    url: "https://example.test/math-racer/app.js",
     mode: "same-origin",
   };
   events.fetch({
@@ -104,7 +105,7 @@ const vm = require("node:vm");
   events.fetch({
     request: {
       ...request,
-      url: "https://example.test/new-route",
+      url: "https://example.test/math-racer/new-route",
       mode: "navigate",
     },
     respondWith: (promise) => {
@@ -114,6 +115,7 @@ const vm = require("node:vm");
   assert.equal((await response).cached, "./index.html");
   for (const ignored of [
     { ...request, method: "POST" },
+    { ...request, url: "https://example.test/math-treasure-quest/app.js" },
     { ...request, url: "https://other.test/" },
   ])
     events.fetch({

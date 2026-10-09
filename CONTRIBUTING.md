@@ -1,4 +1,4 @@
-# Contributing to Mathe-Schatzreise
+# Contributing to Math Racer
 
 First of all: thank you! 💛 Every contribution — code, translations, ideas, bug
 reports — helps make math a little friendlier for children.
@@ -17,8 +17,8 @@ do not need a complex toolchain to help.
 ## Getting started
 
 ```bash
-git clone https://github.com/AllesSuper/math-treasure-quest.git
-cd math-treasure-quest
+git clone https://github.com/AllesSuper/math-racer.git
+cd math-racer
 npm start      # or: python3 -m http.server 8080
 ```
 

@@ -1,5 +1,5 @@
 /*
- * Mathe-Schatzreise - app.js
+ * Math Racer - app.js
  * Vanilla JavaScript game engine for an offline math adventure.
  *
  * Structure:
@@ -1128,112 +1128,112 @@ var I18N = {
 var LEARNING_TEXT = {
   de: [
     "Geteilt-Rechnen",
-    "Teile ohne Rest: bis 100 durch 1 bis 10.",
+    "Teile ohne Rest: bis 100 durch 2 bis 10.",
     "Alle vier Rechenarten ausgewogen gemischt.",
     "Schon {n} Aufgaben geschafft! Weiter so!",
     "denn",
   ],
   en: [
     "Division",
-    "Divide exactly: up to 100 by 1 to 10.",
+    "Divide exactly: up to 100 by 2 to 10.",
     "A balanced mix of all four operations.",
     "You solved {n} tasks! Keep going!",
     "because",
   ],
   es: [
     "División",
-    "Divide sin resto: hasta 100 entre 1 y 10.",
+    "Divide sin resto: hasta 100 entre 2 y 10.",
     "Las cuatro operaciones equilibradas.",
     "¡Ya resolviste {n} tareas! ¡Sigue así!",
     "porque",
   ],
   fr: [
     "Divisions",
-    "Divise sans reste : jusqu’à 100 par 1 à 10.",
+    "Divise sans reste : jusqu’à 100 par 2 à 10.",
     "Les quatre opérations bien réparties.",
     "Déjà {n} calculs réussis ! Continue !",
     "car",
   ],
   it: [
     "Divisioni",
-    "Dividi senza resto: fino a 100 per 1–10.",
+    "Dividi senza resto: fino a 100 per 2–10.",
     "Le quattro operazioni in equilibrio.",
     "Hai risolto {n} calcoli! Continua così!",
     "perché",
   ],
   pt: [
     "Divisão",
-    "Divide sem resto: até 100 por 1 a 10.",
+    "Divide sem resto: até 100 por 2 a 10.",
     "As quatro operações equilibradas.",
     "Já resolveste {n} tarefas! Continua!",
     "porque",
   ],
   nl: [
     "Delen",
-    "Deel zonder rest: tot 100 door 1 tot 10.",
+    "Deel zonder rest: tot 100 door 2 tot 10.",
     "Alle vier bewerkingen evenwichtig gemengd.",
     "Al {n} sommen opgelost! Ga zo door!",
     "want",
   ],
   pl: [
     "Dzielenie",
-    "Dziel bez reszty: do 100 przez 1–10.",
+    "Dziel bez reszty: do 100 przez 2–10.",
     "Wszystkie cztery działania w równowadze.",
     "Już {n} zadań rozwiązanych! Tak trzymaj!",
     "ponieważ",
   ],
   uk: [
     "Ділення",
-    "Діли без остачі: до 100 на числа 1–10.",
+    "Діли без остачі: до 100 на числа 2–10.",
     "Рівномірна суміш чотирьох дій.",
     "Уже {n} завдань розв’язано! Так тримати!",
     "тому що",
   ],
   ru: [
     "Деление",
-    "Дели без остатка: до 100 на числа 1–10.",
+    "Дели без остатка: до 100 на числа 2–10.",
     "Все четыре действия поровну.",
     "Уже {n} заданий решено! Продолжай!",
     "потому что",
   ],
   tr: [
     "Bölme",
-    "Kalansız böl: 100’e kadar, bölen 1–10.",
+    "Kalansız böl: 100’e kadar, bölen 2–10.",
     "Dört işlem dengeli bir karışımda.",
     "{n} soru çözdün! Devam et!",
     "çünkü",
   ],
   ar: [
     "القسمة",
-    "قسمة دون باقٍ: حتى 100 على 1 إلى 10.",
+    "قسمة دون باقٍ: حتى 100 على 2 إلى 10.",
     "مزيج متوازن من العمليات الأربع.",
     "حللت {n} مسائل! واصل!",
     "لأن",
   ],
   hi: [
     "भाग",
-    "बिना शेष भाग: 100 तक, भाजक 1 से 10।",
+    "बिना शेष भाग: 100 तक, भाजक 2 से 10।",
     "चारों संक्रियाओं का संतुलित मिश्रण।",
     "तुमने {n} प्रश्न हल किए! आगे बढ़ो!",
     "क्योंकि",
   ],
   zh: [
     "除法",
-    "整除：100以内，除数为1至10。",
+    "整除：100以内，除数为2至10。",
     "均衡练习四种运算。",
     "已完成{n}道题！继续加油！",
     "因为",
   ],
   ja: [
     "割り算",
-    "余りなし：100まで、割る数は1から10。",
+    "余りなし：100まで、割る数は2から10。",
     "4種類の計算をバランスよく。",
     "{n}問できたね！その調子！",
     "なぜなら",
   ],
   ko: [
     "나눗셈",
-    "나머지 없이: 100까지, 나누는 수는 1–10.",
+    "나머지 없이: 100까지, 나누는 수는 2–10.",
     "네 가지 연산을 골고루 연습해요.",
     "벌써 {n}문제 해결! 계속해요!",
     "왜냐하면",
@@ -1241,6 +1241,7 @@ var LEARNING_TEXT = {
 };
 Object.keys(LEARNING_TEXT).forEach(function (code) {
   var strings = LEARNING_TEXT[code];
+  I18N[code].m_mul_desc = "2 × 2 … 10 × 10";
   I18N[code].m_div = strings[0];
   I18N[code].m_div_desc = strings[1];
   I18N[code].m_mix_desc = strings[2];
@@ -1338,11 +1339,11 @@ function generateSubtraction(level) {
 }
 
 /*
- * The complete 1..10 times tables are available from the very first task.
+ * The complete 2..10 times tables are available from the very first task.
  */
 function generateMultiplication(level) {
-  var a = randInt(1, 10);
-  var b = randInt(1, 10);
+  var a = randInt(2, 10);
+  var b = randInt(2, 10);
   return {
     type: "mul",
     operands: [a, b],
@@ -1353,7 +1354,7 @@ function generateMultiplication(level) {
 
 // Generate exact division using a divisor and quotient, never a remainder.
 function generateDivision(level) {
-  var divisor = randInt(1, 10);
+  var divisor = randInt(2, 10);
   var quotient = randInt(1, 10);
   var dividend = divisor * quotient;
   return {
@@ -1433,7 +1434,7 @@ function validateTask(task) {
     var f1 = task.operands[0];
     var f2 = task.operands[1];
     return (
-      f1 >= 1 && f1 <= 10 && f2 >= 1 && f2 <= 10 && f1 * f2 === task.answer
+      f1 >= 2 && f1 <= 10 && f2 >= 2 && f2 <= 10 && f1 * f2 === task.answer
     );
   }
   if (task.type === "div") {
@@ -1442,7 +1443,7 @@ function validateTask(task) {
     return (
       dividend >= 1 &&
       dividend <= 100 &&
-      divisor >= 1 &&
+      divisor >= 2 &&
       divisor <= 10 &&
       task.answer >= 1 &&
       task.answer <= 10 &&
@@ -2189,9 +2190,9 @@ var SHOP_BUDDIES = [
 function startApp() {
   /* ---------------- Storage helpers ---------------- */
   var STORAGE_KEYS = {
-    lang: "ms_lang",
-    settings: "ms_settings",
-    progress: "ms_progress",
+    lang: "mr_lang",
+    settings: "mr_settings",
+    progress: "mr_progress",
   };
 
   function storageGet(key, fallback) {

@@ -1,10 +1,14 @@
-# 🏆 Math Treasure Quest
+# 🏆 Math Racer
+
+Full standalone copy of [Math Treasure Quest](https://github.com/AllesSuper/math-treasure-quest) at commit `e723ef3acdf07086eab56602e855d7a501ffb8f6`, preserving its adventure gameplay and MIT attribution. The project title is Math Racer; this version does not introduce racing mechanics. Historical reports and screenshots below document the original baseline.
+
+Math Racer uses separate `mr_` local storage and `math-racer-` caches so the original app remains independent. Existing progress stays in the original app.
 
 A fun and educational treasure-hunting adventure that helps children practice mathematics while exploring an exciting journey toward hidden treasures.
 
 🌍 Multi-language support • 📱 Tablet friendly • 🔒 Privacy friendly • 📶 Offline capable • 🎮 Gamified learning
 
-**Live Demo:** https://allessuper.github.io/math-treasure-quest/
+**Live Demo:** https://allessuper.github.io/math-racer/
 
 ---
 
@@ -20,8 +24,8 @@ A fun and educational treasure-hunting adventure that helps children practice ma
 
 - ➕ Addition (0–100)
 - ➖ Subtraction (0–100)
-- ✖️ Multiplication (1×1 to 10×10; all 100 factor pairs from the start)
-- ➗ Exact division (dividend ≤100, divisor 1–10, quotient 1–10)
+- ✖️ Multiplication (2×2 to 10×10; all 81 factor pairs from the start)
+- ➗ Exact division (dividend ≤100, divisor 2–10, quotient 1–10)
 - 🗺️ Adventure-based progression system
 - 💎 Unique treasure reward at the end of each journey
 - 🌍 Multiple languages
@@ -85,7 +89,7 @@ Choose from many languages including German, English, Spanish, French, Italian a
 
 ## 🎯 Educational Goals
 
-Math Treasure Quest was designed to make practicing mathematics fun and motivating for young learners.
+Math Racer was designed to make practicing mathematics fun and motivating for young learners.
 
 Children improve:
 
@@ -103,13 +107,13 @@ Children improve:
 
 Visit:
 
-https://allessuper.github.io/math-treasure-quest/
+https://allessuper.github.io/math-racer/
 
 ### Run Locally
 
 ```bash
-git clone https://github.com/AllesSuper/math-treasure-quest.git
-cd math-treasure-quest
+git clone https://github.com/AllesSuper/math-racer.git
+cd math-racer
 ```
 
 Then open:
@@ -157,7 +161,7 @@ Most free math games for kids are buried in ads, demand accounts, or quietly
 track children. Parents and teachers deserve something better: a calm, friendly,
 self-contained tool that respects the child and the family.
 
-Mathe-Schatzreise is intentionally tiny and transparent. Anyone can read every
+Math Racer is intentionally tiny and transparent. Anyone can read every
 line, host it for free, and trust that nothing is happening behind the scenes.
 It is a gift to families, classrooms, and the open-source community.
 
@@ -179,18 +183,18 @@ It is a gift to families, classrooms, and the open-source community.
 | ----------------- | ------------------------------------------ | ---------------------------------------------- |
 | ➕ Addition       | 2 or 3 numbers, each 0–100, sum ≤ 100      | Sums never exceed 100.                         |
 | ➖ Subtraction    | 0–100                                      | Result is never negative in normal play.       |
-| ✖️ Multiplication | 1×1 up to 10×10                            | Both factors 1–10; all 100 pairs immediately.  |
-| ➗ Division       | Dividend ≤100, divisor 1–10, quotient 1–10 | Whole numbers, no remainder; maximum 100 ÷ 10. |
+| ✖️ Multiplication | 2×2 up to 10×10                            | Both factors 2–10; all 81 pairs immediately.  |
+| ➗ Division       | Dividend ≤100, divisor 2–10, quotient 1–10 | Whole numbers, no remainder; maximum 100 ÷ 10. |
 | 🌈 Mixed          | All four operations                        | Station counts differ by at most one.          |
 
 ### Learning at the start of third grade
 
 New learners start at level 1.5, with sums and starting numbers up to 30.
-Multiplication and inverse division use the full 1–10 tables from the first
+Multiplication and inverse division use the full permitted tables from the first
 task, including Adaptive mode. Older learning records below 1.5 are raised once;
 higher records and subsequent easing are preserved. Adaptive learning is saved
 separately for each operation in the existing
-`ms_progress.learning` record. Four correct answers increase that operation's
+`mr_progress.learning` record. Four correct answers increase that operation's
 rating by 0.125 (levels 1–5); a mistake or timeout reduces it by 0.125 and clears
 the success counter. A Joker does not increase learning. Existing coins, stars,
 badges, treasure collections, companions and settings are retained.
@@ -222,7 +226,7 @@ practice attempts can differ from the balanced distribution of map stations.
 2. Tap the **Share** icon (the square with an upward arrow).
 3. Choose **"Add to Home Screen"**.
 4. Confirm the name and tap **Add**.
-5. Launch **Mathe-Schatzreise** from the home screen — it runs full screen and
+5. Launch **Math Racer** from the home screen — it runs full screen and
    works offline after the first load.
 
 ---
@@ -233,8 +237,8 @@ No build step and no dependencies are required. Any static file server works.
 
 ```bash
 # Clone the repository
-git clone https://github.com/USERNAME/math-treasure-quest.git
-cd math-treasure-quest
+git clone https://github.com/USERNAME/math-racer.git
+cd math-racer
 
 # Option A: Node (uses the bundled npm script)
 npm start            # serves the app at http://localhost:8080
@@ -270,7 +274,7 @@ See [docs/TABLES_REPORT.md](docs/TABLES_REPORT.md) for the current verification 
 ## 🗂️ Project structure
 
 ```
-math-treasure-quest/
+math-racer/
 ├── index.html              # App shell and all screens
 ├── styles.css              # Cartoon theme, layout, animations
 ├── app.js                  # Game engine, i18n, math generators
@@ -336,7 +340,7 @@ root of the project to GitHub Pages.
 1. Push the repository to GitHub.
 2. Open **Settings → Pages** and set **Source** to **GitHub Actions**.
 3. The `pages.yml` workflow runs on every push to `main` and deploys the site.
-4. Your app appears at `https://USERNAME.github.io/math-treasure-quest/`.
+4. Your app appears at `https://USERNAME.github.io/math-racer/`.
 
 ---
 
@@ -370,6 +374,6 @@ Released under the [MIT License](LICENSE). Free to use, share, remix and host.
 
 ## ⭐ A small ask
 
-If Mathe-Schatzreise helps a child you know enjoy math a little more, consider
+If Math Racer helps a child you know enjoy math a little more, consider
 giving the project a star. It helps other parents and teachers discover it — and
 it genuinely makes the maintainers smile. Thank you for stopping by! 💛

@@ -59,13 +59,13 @@ try {
     }
   }
   for (const [level, seen] of multiplicationByLevel)
-    check(seen.size === 100, "all 100 products available at level " + level);
+    check(seen.size === 81, "all 81 products available at level " + level);
   for (const [level, seen] of divisionByLevel) {
     check(
-      seen.size === 100,
-      "all 100 inverse facts available at level " + level,
+      seen.size === 90,
+      "all 90 inverse facts available at level " + level,
     );
-    for (const example of ["64:8", "72:9", "56:7", "54:9", "100:10", "3:1"])
+    for (const example of ["64:8", "72:9", "56:7", "54:9", "100:10"])
       check(seen.has(example), "division available immediately: " + example);
   }
   for (const total of [10, 25]) {
@@ -95,19 +95,20 @@ const edges = [
   task("sub", [100, 100], 0),
   task("sub", [100, 0], 100),
   task("mul", [2, 2], 4),
-  task("mul", [1, 1], 1),
   task("mul", [10, 10], 100),
   task("div", [100, 10], 10),
   task("div", [2, 2], 1),
   task("div", [81, 9], 9),
   task("div", [64, 8], 8),
   task("div", [72, 8], 9),
-  task("div", [3, 1], 3),
   task("div", [54, 9], 6),
 ];
 for (const q of edges) check(app.validateTask(q), "valid boundary");
 for (const q of [
   null,
+  task("mul", [1, 2], 2),
+  task("mul", [2, 1], 2),
+  task("div", [3, 1], 3),
   {},
   task("add", [-1, 1], 0),
   task("add", [1.5, 2], 3.5),
@@ -224,7 +225,7 @@ for (let dividend = 1; dividend <= 100; dividend++)
   for (let divisor = 1; divisor <= 10; divisor++) {
     const q = task("div", [dividend, divisor], dividend / divisor);
     check(
-      app.validateTask(q) === (dividend % divisor === 0 && q.answer <= 10),
+      app.validateTask(q) === (divisor >= 2 && dividend % divisor === 0 && q.answer <= 10),
       "exhaustive division bounds",
     );
   }
