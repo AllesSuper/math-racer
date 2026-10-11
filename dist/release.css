@@ -1,0 +1,21 @@
+/* A clear reading zone, then an unobstructed road. */
+.game .question{top:76px;padding:8px 16px;min-width:210px;background:#10242c;box-shadow:0 4px 14px #0006}
+.game .question strong{font-size:40px;margin:2px 0}.game .question small{font-size:10px;letter-spacing:.5px}
+.game .race-hud{top:79px;left:auto;right:14px;display:block;text-align:right;width:115px;z-index:4}
+.race-hud #race-position{display:block;font:800 32px 'Barlow Condensed',sans-serif;border:2px solid var(--mint);background:#10242c;padding:6px 12px;box-shadow:0 3px 12px #0005}
+.race-hud #race-order{display:none}
+.race-hud #race-position::before{content:'PLATZ';display:block;font:700 10px 'DM Sans',sans-serif;letter-spacing:2px;color:#e0ecd1}
+.game .answers,.playing .game .answers{top:180px;bottom:auto;left:4%;right:4%;gap:6px;z-index:4}
+.game .answers button{font-size:clamp(24px,3.6vw,38px);min-height:54px;padding:5px 0;background:#102b35;border:2px solid #bfd1d5;box-shadow:0 3px 8px #0005}
+.game .answers button.active{background:var(--mint);color:#122516;transform:none;border-color:white}
+.game #feedback:not(:has(button)){top:auto;bottom:225px;left:15%;right:15%;padding:8px 12px;background:#10242cf5;pointer-events:none}
+.rank-notice,.chain-notice{position:absolute;z-index:4;pointer-events:none;background:#10242cf5;border:2px solid #d0ef85;border-radius:10px;color:#ecffd2;padding:12px;font-weight:800;box-shadow:0 6px 20px #0006}
+.rank-notice{left:14px;top:255px;font-size:17px;max-width:190px}.rank-notice.lost{border-color:#ffbd8c;color:#ffe0ca}
+.chain-notice{bottom:215px;left:20%;right:20%;text-align:center;font-size:18px}
+.chain-meter{position:absolute;top:145px;left:14px;z-index:3;font-size:11px;padding:5px 8px;background:#10242c;color:var(--mint);border-radius:5px;pointer-events:none}
+.rank-notice:not([hidden]),.chain-notice:not([hidden]){animation:race-pop .3s ease-out}
+@keyframes race-pop{from{transform:scale(.88);opacity:.2}to{transform:scale(1);opacity:1}}
+body:has(#calm:checked) .rank-notice,body:has(#calm:checked) .chain-notice{animation:none}
+.highscores{margin:28px 0 0;padding:20px;border:1px solid #45626a;border-radius:14px;background:#142830}.highscores h2{margin:0 0 8px;color:var(--mint)}.highscores p{font-size:12px;color:#c4d5d9}.score-scroll{overflow:auto;max-height:340px}.highscores table{border-collapse:collapse;width:100%;font-size:12px;text-align:left}.highscores th{color:#e1f6ba;background:#10212a;position:sticky;top:0}.highscores td,.highscores th{padding:11px 8px;border-bottom:1px solid #36505b;white-space:nowrap}.latest-score{background:#324c34;color:#e5ffc3}.score-message{font-weight:bold;color:var(--mint)!important}.result-scores{padding:12px;text-align:left}.result-scores .score-scroll{max-height:190px}.playing main>.highscores{display:none}.game #feedback:has(.result-scores){inset:130px 5% 15px;max-height:none;overflow:auto}
+@media(max-width:600px){.game .question,.playing .game .question{top:76px;min-width:175px;padding:7px 9px;left:43%}.game .question strong{font-size:34px}.game .question small{font-size:8px}.game .race-hud,.playing .game .race-hud{top:79px;right:8px;width:73px}.race-hud #race-position{font-size:23px;padding:7px 3px}.chain-meter{top:151px;left:10px;font-size:10px}.game .answers,.playing .game .answers{left:2%;right:2%;top:180px;gap:3px}.game .answers button{font-size:25px;min-height:48px}.rank-notice{top:240px;left:8px;font-size:12px;max-width:130px;padding:8px}.chain-notice{left:8%;right:8%;font-size:14px;bottom:215px}.game #feedback:not(:has(button)){left:5%;right:5%;bottom:265px}.game #feedback:has(.result-scores){inset:95px 3% 10px}.highscores{padding:12px}}
+@media(prefers-reduced-motion:reduce){.rank-notice,.chain-notice{animation:none!important}}

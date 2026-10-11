@@ -26,6 +26,7 @@ jobs:
           node test-strategy.cjs
           node test-learning.cjs
           node test-rivals.cjs
+          node test-release.cjs
           node --check dist/soundscape.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4

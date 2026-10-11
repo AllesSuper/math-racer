@@ -6,6 +6,7 @@
     { name: 'Blitz-Ben', color: '#e4a2ff', accuracy: .80, pace: .30 },
     { name: 'Rally-Rio', color: '#ffb878', accuracy: .94, pace: .58 }
   ];
+  let chain = 0, bonusCount = 0;
   let active = false, question = null, pendingFinish = 0, closing = false;
   function damageAnswer(r,good){
     if(good){r.repairStreak++;if(r.damaged&&r.repairStreak>=2){r.damaged=false;r.damageErrors=0;r.comeback=3;if(r.player)toast('WIEDER FIT!','Zwei richtige Antworten reparieren dein Auto. Drei Tore mit Aufholbonus!',3);}}
@@ -31,6 +32,7 @@
   function hud() {
     const order=ranking(true), place=order.findIndex(r=>r.player)+1;
     $('race-position').textContent=active?`${place}. / 4`:'4 FAHRER';
+    globalThis.RallyRelease?.rank(place,active);
     $('race-order').textContent=order.map((r,i)=>`${i+1}. ${r.name}`).join(' · ');
   }
   const baseNext = next;
@@ -42,7 +44,7 @@
   $('start').onclick=()=>{
     if(!rows.size)return baseStart();
     for(const r of [player,...bots])Object.assign(r,{units:0,correct:0,reaction:0,motion:0,spin:0,recovery:0,velocity:90,responded:false,damageErrors:0,damaged:false,repairStreak:0,comeback:0});
-    pendingFinish=0;closing=false;
+    pendingFinish=0;closing=false;chain=0;bonusCount=0;
     active=true;baseStart();hud();
   };
   const baseCross = crossGate;
@@ -52,6 +54,12 @@
       const reaction=good?Math.max(0,duration-held):duration;
       player.units+=answerCredit(player,good,reaction,duration);player.correct+=Number(good);player.reaction+=reaction;
       if(!good)skid(player);
+      chain=good?chain+1:0;
+      if(chain>0&&chain%5===0){
+        bonusCount++;
+        for(const b of bots){skid(b);b.spin=1.05;b.recovery=1.65;b.spinSlow=55;b.velocity=55;}
+        globalThis.RallyRelease?.celebrateChain(chain);
+      }
       for(const b of bots){b.units+=answerCredit(b,b.good,b.solveAt,duration);b.correct+=Number(b.good);b.reaction+=b.good?b.solveAt:duration;}
     }
     baseCross();if(player.spin>0)speed=player.spinSlow||32;hud();
@@ -116,6 +124,6 @@
     ctx.strokeStyle='#b6bbc755';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x-18,y+45);ctx.lineTo(x-30,y+90);ctx.moveTo(x+18,y+45);ctx.lineTo(x+30,y+90);ctx.stroke();
   };
   hud();
-  globalThis.RallyRivals={player,bots,ranking,credit,damageAnswer,answerCredit};
+  globalThis.RallyRivals={player,bots,ranking,credit,damageAnswer,answerCredit,get chain(){return chain},get bonusCount(){return bonusCount}};
 })();
 

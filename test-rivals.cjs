@@ -14,6 +14,7 @@ for(let i=0;i<25;i++){
  for(let j=0;j<400&&run('task!==null&&running');j++)run('tick(.05)');
  while(i<24&&run('task===null&&running'))run('tick(.05)');
 }
+while(run('running')&&run('task===null'))run('tick(.05)');
 assert(run('RallyRivals.ranking()[0].player'));
 assert.equal(run('RallyRivals.player.correct'),25);
 assert(el('feedback').children.some(e=>e.className==='podium'));
