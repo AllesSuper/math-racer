@@ -11,9 +11,10 @@ run('visualLane=task.options.indexOf(task.answer);lane=visualLane;held=3;crossGa
 assert.equal(run('RallyRivals.bonusCount'),1);assert(run('RallyRivals.bots.every(b=>b.spin===1.05&&b.velocity===55)'));
 run('togglePause()');run('tick(.3)');assert.equal(run('RallyRivals.bots[0].spin'),1.05);run('togglePause();tick(.3)');assert(run('RallyRivals.bots[0].spin')<1.05);
 run('next();visualLane=task.options.findIndex(v=>v!==task.answer);lane=visualLane;crossGate()');assert.equal(run('RallyRivals.chain'),0);
-run('RallyRivals.player.units=100;RallyRivals.bots.forEach(b=>b.units=0)');for(let i=0;i<12;i++)run('tick(.05)');
+run("$('start').onclick();RallyRivals.player.units=0;RallyRivals.bots.forEach(b=>b.units=200)");for(let i=0;i<12;i++)run('tick(.05)');
+run('RallyRivals.player.units=300');for(let i=0;i<12;i++)run('tick(.05)');
 assert(el('.game').children.some(e=>e.className==='rank-notice gained'&&!e.hidden));
-run('RallyRivals.bots.forEach(b=>b.units=200)');for(let i=0;i<12;i++)run('tick(.05)');
+run('RallyRivals.bots.forEach(b=>b.units=400)');for(let i=0;i<12;i++)run('tick(.05)');
 assert(el('.game').children.some(e=>e.className==='rank-notice lost'&&!e.hidden));
 run('finish(false)');assert.equal(run('RallyRelease.stored().length'),0);
 run("$('start').onclick()");
