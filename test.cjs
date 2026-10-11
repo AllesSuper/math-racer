@@ -1,0 +1,3 @@
+const assert=require('node:assert/strict');const {task}=require('./dist/engine.js');
+for(const mode of ['mul','div','mix'])for(let row=1;row<=10;row++)for(let i=0;i<500;i++){const t=task([row],mode);assert.equal(t.a,row);assert(t.b>=1&&t.b<=10);assert.equal(t.options.length,4);assert.equal(new Set(t.options).size,4);assert(t.options.includes(t.answer));assert.equal(t.answer,t.division?t.a*t.b/t.a:t.a*t.b);assert(t.options.every(x=>Number.isInteger(x)&&x>0));if(mode==='div')assert(t.options.every(x=>x<=10));}
+assert.throws(()=>task([],'mul'));console.log('15.000 Aufgaben geprüft: Reihen 1–10, ganzzahlige Division, vier eindeutige Antworten.');

@@ -1,379 +1,42 @@
-# 🏆 Math Racer
+# Einmaleins Rally · Version 2
 
-Full standalone copy of [Math Treasure Quest](https://github.com/AllesSuper/math-treasure-quest) at commit `e723ef3acdf07086eab56602e855d7a501ffb8f6`, preserving its adventure gameplay and MIT attribution. The project title is Math Racer; this version does not introduce racing mechanics. Historical reports and screenshots below document the original baseline.
+Öffne `dist/index.html` im Browser und lade eine schon offene Seite mit Strg+F5 neu. Alternativ `Einmaleins-Rally.html` per Doppelklick starten; diese einzelne Datei enthält die vollständige aktuelle Version.
 
-Math Racer uses separate `mr_` local storage and `math-racer-` caches so the original app remains independent. Existing progress stays in the original app.
+## Neu
 
-A fun and educational treasure-hunting adventure that helps children practice mathematics while exploring an exciting journey toward hidden treasures.
+25 automatisch gewertete Antworttore, eine durchgehende Fahrt, fünf Welten mit 4–7 Spuren, Kurven, Frühbonus für Tempo und Punkte, Autowäsche, Schutzschild, Fahrhindernisse, Sammelsterne und vier freischaltbare sichtbare Autoteile. Multiplikation, Division und gemischte Aufgaben bleiben erhalten. Fehler werden während der Fahrt erklärt und wiederholt.
 
-🌍 Multi-language support • 📱 Tablet friendly • 🔒 Privacy friendly • 📶 Offline capable • 🎮 Gamified learning
+Während der Runde nur mit Pfeiltasten, A/D oder 1–7 lenken. Touch: wischen oder eine Spur antippen. Keine Antwortbestätigung nötig. Leertaste pausiert. Die Garage wird nach 25 Toren angezeigt. Ab 20 richtigen Antworten gilt die Runde als erfolgreich und schaltet in den ersten vier erfolgreichen Runden jeweils ein Teil frei.
 
-**Live Demo:** https://allessuper.github.io/math-racer/
+Rekord und Garage werden im selben Browser gespeichert. Zwischen Dateiversion und HTTP-Version können Speicherstände getrennt sein. Optionale Google-Schriften benötigen Internet; Ersatzschriften funktionieren offline.
 
----
+## Konzept und Recherche
 
-<p align="center">
-  <img src="docs/start-screen.jpg" width="30%">
-  <img src="docs/gameplay-question.jpg" width="30%">
-  <img src="docs/treasure-reward.jpg" width="30%">
-</p>
+Siehe `RECHERCHE-UND-SPIELKONZEPT.md` für Quellen, Streckenplanung, Bonusformel, Motivation und Grenzen.
 
----
+## Entwicklung
 
-## ✨ Features
+- `node server.cjs`: lokale Vorschau auf http://127.0.0.1:4173/
+- `node test-rally.cjs`: 12.000 Aufgaben mit 4–7 Spuren und vollständige 25-Tor-Zustandsprüfungen.
+- `node test.cjs`: weitere 15.000 Rechenaufgaben.
+- `node --check dist/app.js`: Syntaxprüfung.
+- `node package.cjs`: eigenständige HTML-Datei nach Änderungen neu erzeugen.
 
-- ➕ Addition (0–100)
-- ➖ Subtraction (0–100)
-- ✖️ Multiplication (2×2 to 10×10; all 81 factor pairs from the start)
-- ➗ Exact division (dividend ≤100, divisor 2–10, quotient 1–10)
-- 🗺️ Adventure-based progression system
-- 💎 Unique treasure reward at the end of each journey
-- 🌍 Multiple languages
-- 📱 Optimized for tablets and desktop devices
-- 🔒 No ads
-- 🔒 No tracking
-- 🔒 No account required
-- 📶 Works offline as a Progressive Web App (PWA)
+Die HTTP-Vorschau antwortete erfolgreich mit 200. Die visuelle Browserprüfung wurde von der Browser-Sicherheitsrichtlinie blockiert und blieb offen. Die Zustandsprüfungen verwenden einen DOM-Ersatz, keinen echten Browser. Keine Veröffentlichung durchgeführt.
 
----
+## Version 3 · Abenteuer
 
-## 📸 Screenshots
+Zusätzlich: drei Fahrzeugtypen, Nitro (SHIFT, nur zwischen Rechentoren), Rampensprünge, Sternenmagnet, Nitrotanks, Missionsziele und gespeicherte Abzeichen. Gehaltene Lenktasten und unmittelbares Touch-Dragging; optionaler Controller. Die Darstellung erhält Lackglanz, Karosserieneigung, Federung, Straßenstruktur, Reflektoren und Küstenwetter. Komfortoptionen: ruhigere Effekte und zwei Zusatzsekunden nach Fehlern.
 
-### 🏠 Start Screen
+`dist/adventure.js` ergänzt die bestehende Spiellogik. `node test-adventure.cjs` prüft die neuen Interaktionen. Recherche, Entscheidungen und Grenzen stehen in `RECHERCHE-V3.md`. Controller, Touch, Ton und Optik sind nicht mit echter Browser-/Gerätehardware verifiziert.
 
-Choose your adventure and begin your treasure hunt.
+## Geisterrennen
 
-![Start Screen](docs/start-screen.jpg)
+Drei halbtransparente, simulierte Rivalen konkurrieren bei denselben 25 Aufgaben. Live-Platzierung und Podium am Ziel. Richtige Antworten zählen mehr als reines Tempo: pro richtigem Tor 1 Rennpunkt plus bis zu 0,5 Zeitbonus. Sterne und Missionen ändern die Rennplatzierung nicht direkt. Der Tempovorsprung zählt zusätzlich zur Rennwertung; dadurch wirken Nitro und Dreher auf den Rückstand. Geisterautos sind kollisionsfrei und ihre grafischen Spuren verraten keine Lösung. `node test-rivals.cjs` prüft Siegerlogik, Zeitbonus, Podium, vollständige Runden und Abbruch.
 
----
 
-### ⚙️ Game Setup
+### Schleudern bei Rechenfehlern
 
-Select math type, difficulty and optional timer mode.
+Alle vier Fahrer haben eigene Geschwindigkeit, Dreherzeit und Erholung. Eine falsche Antwort löst 1,6 Sekunden Schleudern mit zwei sichtbaren Drehungen aus, das Tempo fällt auf etwa 32 km/h und erholt sich anschließend. Die anderen Fahrzeuge werden nicht künstlich beschleunigt: Sie fahren weiter und ziehen relativ vorbei. Der Tempounterschied wird laufend in den Vorsprung eingerechnet. Gegnerfehler treten bei ihrer simulierten Antwortzeit auf; Spielerfehler bei der Tordurchfahrt. Bei einem Fehler am letzten Tor läuft die Dreheranimation vor der Podiumsauswertung zu Ende. Pausieren friert auch die Dreher ein. Die Rechenanzeige selbst dreht sich nicht.
 
-![Game Setup](docs/game-setup.jpg)
-
----
-
-### 🗺️ Adventure Map
-
-Travel across the island and progress toward the hidden treasure.
-
-![Adventure Map](docs/gameplay-map.jpg)
-
----
-
-### ➕ Solve Math Challenges
-
-Answer addition, subtraction, multiplication and division tasks to advance.
-
-![Math Challenge](docs/gameplay-question.jpg)
-
----
-
-### 💎 Treasure Reward
-
-Reach the treasure and discover a unique reward at the end of every journey.
-
-![Treasure Reward](docs/treasure-reward.jpg)
-
----
-
-### 🌍 Multi-Language Support
-
-Choose from many languages including German, English, Spanish, French, Italian and more.
-
-![Language Selection](docs/language-selection.jpg)
-
----
-
-## 🎯 Educational Goals
-
-Math Racer was designed to make practicing mathematics fun and motivating for young learners.
-
-Children improve:
-
-- Mental arithmetic
-- Problem solving
-- Concentration
-- Confidence with numbers
-- Learning persistence through positive rewards
-
----
-
-## 🚀 Getting Started
-
-### Play Online
-
-Visit:
-
-https://allessuper.github.io/math-racer/
-
-### Run Locally
-
-```bash
-git clone https://github.com/AllesSuper/math-racer.git
-cd math-racer
-```
-
-Then open:
-
-```text
-index.html
-```
-
-in your browser.
-
----
-
-## 🤝 Contributing
-
-Contributions, suggestions and feedback are welcome.
-
-If you enjoy the project, consider giving it a ⭐ on GitHub.
-
----
-
-## 📜 License
-
-MIT License
-
----
-
-## ✨ Feature overview
-
-- 🗺️ **Adventure map** with a moving traveler and visible journey progress.
-- 🧮 **Four math modes** plus a balanced colorful mixed mode.
-- 🎯 **Adaptive difficulty** that grows and eases with the child.
-- 💡 **Helpful hints** appear after a mistake — never punishing, always guiding.
-- ⭐ **Stars, 🔥 streaks, 🪙 coins, 🎖️ badges** and a 💎 **random treasure** each run.
-- ⏱️ **Optional timer mode** and ⚡ **quick mode** (10 tasks).
-- 🌍 **16 languages**, German first; choice saved on the device.
-- 📱 **Installable PWA** — add to the iPad home screen and play offline.
-- 🎨 **Premium cartoon look** built only from original CSS/SVG/HTML graphics.
-- 🔒 **No backend, no login, no tracking, no ads, no external APIs.**
-
----
-
-## 💛 Why this project exists
-
-Most free math games for kids are buried in ads, demand accounts, or quietly
-track children. Parents and teachers deserve something better: a calm, friendly,
-self-contained tool that respects the child and the family.
-
-Math Racer is intentionally tiny and transparent. Anyone can read every
-line, host it for free, and trust that nothing is happening behind the scenes.
-It is a gift to families, classrooms, and the open-source community.
-
----
-
-## 🎓 Educational benefits
-
-- Reinforces **number bonds to 100** through repeated, varied practice.
-- Builds **multiplication fluency** with factors from 2 to 10, and exact division.
-- Encourages a **growth mindset**: mistakes lead to hints, not dead ends.
-- Uses **immediate, encouraging feedback** to keep motivation high.
-- Standard runs have **25 stations**; quick runs have **10 stations**.
-
----
-
-## 🧮 Supported math modes
-
-| Mode              | Range                                      | Notes                                          |
-| ----------------- | ------------------------------------------ | ---------------------------------------------- |
-| ➕ Addition       | 2 or 3 numbers, each 0–100, sum ≤ 100      | Sums never exceed 100.                         |
-| ➖ Subtraction    | 0–100                                      | Result is never negative in normal play.       |
-| ✖️ Multiplication | 2×2 up to 10×10                            | Both factors 2–10; all 81 pairs immediately.   |
-| ➗ Division       | Dividend ≤100, divisor 2–10, quotient 1–10 | Whole numbers, no remainder; maximum 100 ÷ 10. |
-| 🌈 Mixed          | All four operations                        | Station counts differ by at most one.          |
-
-### Learning at the start of third grade
-
-New learners start at level 1.5, with sums and starting numbers up to 30.
-Multiplication and inverse division use the full permitted tables from the first
-task, including Adaptive mode. Older learning records below 1.5 are raised once;
-higher records and subsequent easing are preserved. Adaptive learning is saved
-separately for each operation in the existing
-`mr_progress.learning` record. Four correct answers increase that operation's
-rating by 0.125 (levels 1–5); a mistake or timeout reduces it by 0.125 and clears
-the success counter. A Joker does not increase learning. Existing coins, stars,
-badges, treasure collections, companions and settings are retained.
-
-Exact division includes 64 ÷ 8, 72 ÷ 9, 56 ÷ 7, 54 ÷ 9 and 3 ÷ 1;
-100 ÷ 10 is the largest task, and the quotient never exceeds 10.
-When Timer mode is enabled in
-the start menu, every operation displays the running countdown both in the
-task ring and in the top bar.
-
-Timers and Blitz tasks default to off for new installations; existing choices
-are respected. Each concrete task determines its starting time: multiplication
-6–20 seconds, division 10–30 seconds, addition/subtraction 12–40 seconds. A small
-allowance for a slower pace stays within those bounds. Stars still buy +10
-seconds and the Extra time power-up adds +5 seconds. Purchased time survives
-pause/resume and never changes the next task's starting budget.
-
-Every five solved tasks the mascot celebrates a milestone. Mistakes retain the
-original setback and shield mechanics and show intermediate calculations;
-division also shows the inverse multiplication, e.g. `56 ÷ 7 = 8, because
-7 × 8 = 56`. Setbacks revisit the operation planned for that station, so extra
-practice attempts can differ from the balanced distribution of map stations.
-
----
-
-## 📲 Install on iPad (Add to Home Screen)
-
-1. Open the live demo URL in **Safari** on the iPad.
-2. Tap the **Share** icon (the square with an upward arrow).
-3. Choose **"Add to Home Screen"**.
-4. Confirm the name and tap **Add**.
-5. Launch **Math Racer** from the home screen — it runs full screen and
-   works offline after the first load.
-
----
-
-## 🛠️ Local development
-
-No build step and no dependencies are required. Any static file server works.
-
-```bash
-# Clone the repository
-git clone https://github.com/USERNAME/math-racer.git
-cd math-racer
-
-# Option A: Node (uses the bundled npm script)
-npm start            # serves the app at http://localhost:8080
-
-# Option B: Python (no Node required)
-python3 -m http.server 8080
-```
-
-Then open `http://localhost:8080` in your browser.
-
-Useful scripts (see `package.json`):
-
-```bash
-npm start      # serve the app locally
-npm test       # run the math range/validation tests
-npm run validate # syntax and JSON validation
-npm ci
-npx playwright install chromium
-npm run test:browser # real browser, shop, rewards, storage, mobile and offline
-npm run format # format files with Prettier
-```
-
-> Service workers require `http://localhost` or HTTPS. Opening `index.html`
-> directly via `file://` disables offline caching but the game still runs.
-
-Browser tests also support `TEST_BROWSER=firefox` or `webkit` after installing
-that Playwright browser. On Windows, `BROWSER_CHANNEL=msedge` uses installed
-Edge. The app has no runtime dependencies; Playwright and Prettier are dev-only.
-See [docs/TABLES_REPORT.md](docs/TABLES_REPORT.md) for the current verification record.
-
----
-
-## 🗂️ Project structure
-
-```
-math-racer/
-├── index.html              # App shell and all screens
-├── styles.css              # Cartoon theme, layout, animations
-├── app.js                  # Game engine, i18n, math generators
-├── manifest.json           # PWA metadata
-├── service-worker.js       # Offline-first cache
-├── icons/
-│   ├── favicon.svg         # Original vector icon
-│   ├── icon-192.png        # PWA icon
-│   ├── icon-512.png        # PWA icon
-│   └── icon-maskable-512.png
-├── tests/
-│   └── math.test.js        # Range + validation unit tests (Node)
-├── .github/
-│   ├── workflows/
-│   │   ├── pages.yml        # Deploy static site to GitHub Pages
-│   │   └── quality.yml      # Lint/validate + run tests
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── bug_report.yml
-│   │   └── feature_request.yml
-│   └── pull_request_template.md
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
-├── SECURITY.md
-├── CHANGELOG.md
-├── ROADMAP.md
-├── package.json
-├── .gitignore
-└── .editorconfig
-```
-
----
-
-## ♿ Accessibility notes
-
-- Large touch targets (≥ 64 px) designed for small hands.
-- High-contrast text and readable, system-friendly font sizing.
-- Full **keyboard support**: number keys, Backspace, Enter (check) and Escape
-  (pause).
-- Semantic landmarks, `aria-live` feedback regions and visible focus styles.
-- Respects `prefers-reduced-motion` for children sensitive to animation.
-- Right-to-left layout support (e.g. Arabic).
-
----
-
-## 📴 Offline & PWA notes
-
-- A service worker pre-caches the full app shell on first load.
-- After that, the game works with **no network connection at all**.
-- Update the `CACHE_VERSION` constant in `service-worker.js` when you change
-  cached assets to refresh clients.
-- Progress (coins, treasures, badges, language) is stored locally in
-  `localStorage` — nothing leaves the device.
-
----
-
-## 🚀 Deploy to GitHub Pages
-
-This repository ships with a GitHub Actions workflow that publishes the static
-root of the project to GitHub Pages.
-
-1. Push the repository to GitHub.
-2. Open **Settings → Pages** and set **Source** to **GitHub Actions**.
-3. The `pages.yml` workflow runs on every push to `main` and deploys the site.
-4. Your app appears at `https://USERNAME.github.io/math-racer/`.
-
----
-
-## 🗺️ Roadmap
-
-See [ROADMAP.md](ROADMAP.md) for the full plan. Highlights:
-
-- 🔊 Sound effects and gentle music
-- 👪 Parent dashboard
-- 🌍 More adventure worlds
-- 📜 Printable certificates
-- 🗣️ Expanded multilingual content
-- 📊 Difficulty analytics
-- 🏫 Classroom mode
-
----
-
-## 🤝 Contributing
-
-Contributions are warmly welcome! Whether it is a translation, a bug fix, or a
-new idea, please read [CONTRIBUTING.md](CONTRIBUTING.md) and our
-[Code of Conduct](CODE_OF_CONDUCT.md) first.
-
----
-
-## 📄 License
-
-Released under the [MIT License](LICENSE). Free to use, share, remix and host.
-
----
-
-## ⭐ A small ask
-
-If Math Racer helps a child you know enjoy math a little more, consider
-giving the project a star. It helps other parents and teachers discover it — and
-it genuinely makes the maintainers smile. Thank you for stopping by! 💛
+Tests: `node test-rivals.cjs` prüft Dreher, Geschwindigkeit, Rückstand, Erholung, Pause und Zielauswertung. Die tatsächliche visuelle Darstellung bleibt ohne Browser-Sichtprüfung.

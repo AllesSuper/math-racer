@@ -1,0 +1,29 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),M=require('./dist/engine.js');
+for(const m of ['mul','div','mix'])for(let row=1;row<=10;row++)for(let n=4;n<=7;n++)for(let i=0;i<100;i++){const t=M.task([row],m,Math.random,n);assert.equal(t.options.length,n);assert.equal(new Set(t.options).size,n);assert(t.options.includes(t.answer));assert.equal(t.answer,t.division?t.b:t.a*t.b);if(t.division)assert(t.options.every(v=>v>=1&&v<=10));}
+assert(M.bonus(7,8,0).points>M.bonus(2,8,0).points);assert.equal(M.bonus(0,8,0).factor,1);assert(M.bonus(7,8,12).factor<=5);
+// Exercise the complete application state machine with a minimal DOM, not a visual browser.
+class E{constructor(){this.children=[];this.style={};this.value='';this.classList={toggle(){}};this.hidden=false}append(...xs){this.children.push(...xs)}replaceChildren(...xs){this.children=xs}setAttribute(){}addEventListener(){}querySelectorAll(){return []}focus(){}scrollIntoView(){}setPointerCapture(){}getContext(){return new Proxy({createLinearGradient(){return{addColorStop(){}}},createRadialGradient(){return{addColorStop(){}}}},{get:(o,k)=>o[k]||(()=>{})})}}
+const nodes=new Map();function el(id){if(!nodes.has(id))nodes.set(id,new E());return nodes.get(id)}el('drive').value='race';el('pace').value='8';el('vehicle').value='sport';const storage=new Map();const sandbox={document:{getElementById:el,createElement:()=>new E(),querySelectorAll:()=>[],addEventListener(){}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},window:{devicePixelRatio:2,addEventListener(){},matchMedia(){return{matches:false}}},RallyMath:M,Math,requestAnimationFrame(){},alert:msg=>{throw Error(msg)}};sandbox.document.body=new E();vm.createContext(sandbox);vm.runInContext(fs.readFileSync('dist/learning.js','utf8'),sandbox);vm.runInContext(fs.readFileSync('dist/app.js','utf8'),sandbox);vm.runInContext(fs.readFileSync('dist/pickup-icons.js','utf8'),sandbox);vm.runInContext(fs.readFileSync('dist/adventure.js','utf8'),sandbox);for(const name of ['rivals','strategy','training','tablet','soundscape','coach'])vm.runInContext(fs.readFileSync('dist/'+name+'.js','utf8'),sandbox);const run=c=>vm.runInContext(c,sandbox);
+run("$('start').onclick()");const seen=new Set();for(let i=0;i<25;i++){seen.add(run('lanes'));run('pick(task.options.indexOf(task.answer))');for(let j=0;j<400&&run('task!==null&&running');j++)run('tick(.05)');if(i<24){assert(run('running'));while(run('task===null&&running'))run('tick(.05)')}}assert.equal(run('total'),25);assert.equal(run('correct'),25);assert.equal(run('running'),false);assert(el('feedback').children.some(e=>e.className==='learning-report')); assert.deepEqual([...seen],[4,5,6,7]);assert.equal(run('garage.wins'),1);assert(run("garage.parts.includes('stripe')"));assert(run('fastCount')>=20);
+// Pause freezes gate timing; leaving the selected correct lane resets the bonus.
+run("$('start').onclick();pick(task.options.indexOf(task.answer));tick(.2);togglePause()");const t=run('elapsed');run('tick(2)');assert.equal(run('elapsed'),t);run('togglePause();held=3;pick((task.options.indexOf(task.answer)+1)%lanes);tick(.05)');assert.equal(run('held'),0);
+// All wrong answers still lead to the finish; no success reward for guessing.
+run("$('start').onclick()");for(let i=0;i<25;i++){run('pick(task.options.findIndex(v=>v!==task.answer))');for(let j=0;j<400&&run('task!==null&&running');j++)run('tick(.05)');while(i<24&&run('task===null&&running'))run('tick(.05)')}assert.equal(run('total'),25);assert.equal(run('correct'),0);assert.equal(run('garage.wins'),1);
+run('render(.016)');console.log('12.000 Aufgaben mit 4–7 Spuren sowie volle 25-Tor-Runden, Bonus, Pause, Fehlerfälle und Garage erfolgreich geprüft.');
+
+
+
+run("$('start').onclick()");const before=run('duration');run('RallyCoach.help()');assert.equal(run('duration'),before+3);run('RallyCoach.help()');assert.equal(run('duration'),before+3);assert(el('coach-use').disabled);assert.equal(el('road').width,1500);
+for(const mode of ['mul','div','mix'])for(const row of [1,2,5,7,10])for(let count=4;count<=7;count++)for(let k=0;k<100;k++){const t=run('RallyMath.task(['+row+'],"'+mode+'",Math.random,'+count+')');assert.equal(t.options.length,count);assert.equal(new Set(t.options).size,count);assert(t.options.includes(t.answer));assert(t.options.every(Number.isInteger));}
+console.log('Alle elf Skripte in HTML-Reihenfolge integriert: Rechentipp, Retina-Begrenzung, Lernbericht und weitere 6.000 Antwortsets geprüft.');
+
+run("$('start').onclick()");
+run('for(let i=0;i<2;i++)RallyRivals.damageAnswer(RallyRivals.player,false)');assert.equal(run('RallyRivals.player.damaged'),false);
+run('RallyRivals.damageAnswer(RallyRivals.player,false)');assert.equal(run('RallyRivals.player.damaged'),true);
+run('RallyRivals.answerCredit(RallyRivals.player,true,0,8)');assert.equal(run('RallyRivals.player.damaged'),true);
+assert.equal(run('RallyRivals.answerCredit(RallyRivals.player,true,0,8)'),1.7);assert.equal(run('RallyRivals.player.damaged'),false);assert.equal(run('RallyRivals.player.damageErrors'),0);
+run('render(.016);RallyRivals.player.damaged=true;render(.016);togglePause()');const damageSpeed=run('speed');run('tick(2)');assert.equal(run('speed'),damageSpeed);
+run("$('start').onclick()");assert.equal(run('RallyRivals.player.damaged'),false);
+// A player with three early errors can overtake rivals after a strong finish.
+run('RallyRivals.player.units=0;for(let i=0;i<3;i++)RallyRivals.player.units+=RallyRivals.answerCredit(RallyRivals.player,false,8,8);for(let i=0;i<22;i++)RallyRivals.player.units+=RallyRivals.answerCredit(RallyRivals.player,true,1,8);for(const b of RallyRivals.bots){b.units=25*RallyRivals.credit(true,4.6,8);b.motion=0;}');assert(run('RallyRivals.ranking()[0].player'));
+console.log('Schaden ab Fehler 3, Reparatur, Aufholbonus, Pause, Neustart und möglicher Sieg nach drei frühen Fehlern geprüft.');

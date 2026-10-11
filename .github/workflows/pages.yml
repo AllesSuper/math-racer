@@ -1,42 +1,36 @@
-name: Deploy to GitHub Pages
-
-# Publishes the static app (repository root) to GitHub Pages on every push to
-# main, and allows manual runs from the Actions tab.
+name: Publish Rally to GitHub Pages
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   workflow_dispatch:
-
-# Permissions required by the Pages deployment.
 permissions:
   contents: read
   pages: write
   id-token: write
-
-# Allow only one concurrent deployment.
 concurrency:
-  group: "pages"
+  group: github-pages
   cancel-in-progress: false
-
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload static site
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
         with:
-          # Deploy the whole repository root (the app is a static site).
-          path: "."
-
-      - name: Deploy to GitHub Pages
+          node-version: '24'
+      - name: Verify arithmetic and game logic
+        run: |
+          node test-strategy.cjs
+          node test-learning.cjs
+          node test-rivals.cjs
+          node --check dist/soundscape.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+      - name: Publish
         id: deployment
         uses: actions/deploy-pages@v4
